@@ -21,11 +21,12 @@ import org.json.JSONObject;
 
 @ServerEndpoint("/broadsocket")
 public class BroadSocket {
-    //유저 집합 리스트
+    //user session list
     static List<Session> sessionUsers = Collections.synchronizedList(new ArrayList<>());
+    
     /**
-     * 웹 소켓이 접속되면 유저리스트에 세션을 넣는다.
-     * @param userSession 웹 소켓 세션
+     * insert the session into an array when connected.
+     * @param userSession 
      */
     @OnOpen
     public void handleOpen(Session userSession, EndpointConfig config){    	
@@ -39,8 +40,8 @@ public class BroadSocket {
     	sessionUsers.add(userSession);
     }
     /**
-     * 웹 소켓으로부터 메시지가 오면 호출한다.
-     * @param message 메시지
+     * called when receives message.
+     * @param message\
      * @param userSession
      * @throws IOException
      */
@@ -48,7 +49,7 @@ public class BroadSocket {
     public void handleMessage(String message,Session userSession) throws IOException{
     	JSONObject obj = new JSONObject(message);
     	
-        //지정된 유저에게만 메시지를 보낸다.
+        // Send the data to selected user.
         Iterator<Session> iterator = sessionUsers.iterator();
         while(iterator.hasNext()){
         	Session sess = iterator.next();
@@ -59,7 +60,7 @@ public class BroadSocket {
         }
     }
     /**
-     * 웹소켓을 닫으면 해당 유저를 유저리스트에서 뺀다.
+     * remove the user from session user list when the websocket is closed.
      * @param userSession
      */
     @OnClose
@@ -68,7 +69,7 @@ public class BroadSocket {
     }
     
     /**
-     * json타입의 메시지 만들기
+     * turn String type message into JSON format.
      * @param username
      * @param message
      * @return

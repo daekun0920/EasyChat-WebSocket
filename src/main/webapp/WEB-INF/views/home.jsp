@@ -11,41 +11,40 @@
 </head>
 <body>
 	<h1>Simple Chat v1.0.0</h1>
-	
-	<div style="margin:10px;">Sign In</div>
-	<a href="?session_id=A" style="border: 1px solid black;padding:5px;">A</a>
-	<a href="?session_id=B" style="border: 1px solid black;padding:5px;">B</a>
-	<a href="?session_id=C" style="border: 1px solid black;padding:5px;">C</a>
 
-	<div style="margin:10px;">Send To</div>
-	<a onclick="sendToCng('A');" style="border: 1px solid black;padding:5px;">A</a>
-	<a onclick="sendToCng('B');" style="border: 1px solid black;padding:5px;">B</a>
-	<a onclick="sendToCng('C');" style="border: 1px solid black;padding:5px;">C</a>
+	<div style="margin: 10px;">Sign In</div>
+	<a href="?session_id=A" style="border: 1px solid black; padding: 5px;">A</a>
+	<a href="?session_id=B" style="border: 1px solid black; padding: 5px;">B</a>
+	<a href="?session_id=C" style="border: 1px solid black; padding: 5px;">C</a>
+
+	<div style="margin: 10px;">Send To</div>
+	<a onclick="sendToCng('A');"
+		style="border: 1px solid black; padding: 5px;">A</a>
+	<a onclick="sendToCng('B');"
+		style="border: 1px solid black; padding: 5px;">B</a>
+	<a onclick="sendToCng('C');"
+		style="border: 1px solid black; padding: 5px;">C</a>
 
 
 	<br />
 	<div id="chatContainer"></div>
 
 	<div id="chatArea"
-		style="width: 500px; height: 500px; overflow-y: scroll;margin-top:30px;"></div>
+		style="width: 500px; height: 500px; overflow-y: scroll; margin-top: 30px;"></div>
 
 	<br />
 
 	<input id="message">
 	<span id="sendBtn"
-		style="border: 1px solid red; padding: 5px; width: 30px;background-color:red;color:white;cursor:pointer;">
+		style="border: 1px solid red; padding: 5px; width: 30px; background-color: red; color: white; cursor: pointer;">
 		Send</span>
-	
-	
+
+
 	<div>
-		Signed In as :
-		<span id="">
-			${sessionScope.userid }
-		</span>
+		Signed In as : <span id=""> ${sessionScope.userid } </span>
 	</div>
 	<div>
-		Send To :
-		<span id="sendTo"></span>
+		Send To : <span id="sendTo"></span>
 	</div>
 </body>
 <script>
@@ -75,14 +74,14 @@
 		});
 	});
 
-	//웹소켓 초기화
+	//Init WebSocket.
 	var webSocket = new WebSocket("ws://localhost:8080/broadsocket");
 
 	var messageTextArea = document.getElementById("chatArea");
 
-	//메시지가 오면 messageTextArea요소에 메시지를 추가한다.
+
 	webSocket.onmessage = function processMessge(message) {
-		//Json 풀기
+		//Json parse
 		var jsonData = JSON.parse(message.data);
 		if (jsonData.message != null) {
 			$("#chatArea")
@@ -110,19 +109,18 @@
 		;
 	}
 
-	//메시지 보내기
+	//Send Message.
 	function sendMessage() {
 		var messageText = document.getElementById("message");
-		
+
 		messageText.value = messageText.value.replace('"', '&#34;');
-		
+
 		webSocket.send('{ \"sendTo\" : \"' + $("#sendTo").text() + '\", \"message\" : \"' + messageText.value + '\"}');
+
+		$("#chatArea").append("<div style='float:right;border:1px solid cornflowerblue;background-color:cornflowerblue;border-radius:6px;margin-bottom:10px;'>" + 
+							   messageText.value + 
+							   "</div><div style='clear:both;'></div>");
 		
-		$("#chatArea")
-				.append(
-						"<div style='float:right;border:1px solid cornflowerblue;background-color:cornflowerblue;border-radius:6px;margin-bottom:10px;'>"
-								+ messageText.value
-								+ "</div><div style='clear:both;'></div>");
 		messageText.value = "";
 	}
 
