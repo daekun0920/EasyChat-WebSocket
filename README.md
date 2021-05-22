@@ -2,7 +2,7 @@
 EasyChat - Easy and Simple WebSocket Example
 
 ## Features
-  - EasyChat is inter-communicable one-to-one chatting program.
+  - EasyChat is an inter-communicable one-to-one chatting program.
   - You can modify the source code to make it more suitable for your own product.
   - is written in Java, Javascript(jQuery).
   
